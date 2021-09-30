@@ -11,7 +11,7 @@ const jobRole = document.getElementById('title')
 const otherRole = document.getElementById('other-job-role')
 otherRole.style.display = "none"
 
-jobRole.addEventListener('change', (e) => {
+jobRole.addEventListener('change', () => {
     if (jobRole.value === 'other') {
         otherRole.style.display = "block"
         otherRole.focus()
@@ -109,11 +109,8 @@ const form = document.querySelector('form')
 const nameInput = document.getElementById('name')
 const emailInput = document.getElementById('email')
 const ccInput = document.getElementById('cc-num')
-const ccHint = document.getElementById('cc-hint')
 const zipCode = document.getElementById('zip')
-const zipCodeHint = document.getElementById('zip-hint')
 const cvv = document.getElementById('cvv')
-const cvvHint = document.getElementById('cvv-hint')
 
 form.addEventListener('submit', (e) => {
     e.preventDefault()
@@ -124,10 +121,7 @@ form.addEventListener('submit', (e) => {
         nameInput.parentNode.classList.add('not-valid')
         nameInput.nextElementSibling.classList.remove('hint')
         nameInput.parentNode.classList.remove('valid')
-    }
-
-    // LISTEN WHEN THE USER CORRECTS THE NAME INPUT
-    if (validName.test(nameInput.value)) {
+    } else if (validName.test(nameInput.value)) {
         nameInput.parentNode.classList.remove('not-valid')
         nameInput.nextElementSibling.classList.add('hint')
         nameInput.parentNode.classList.add('valid')
@@ -139,10 +133,7 @@ form.addEventListener('submit', (e) => {
         emailInput.parentNode.classList.add('not-valid')
         emailInput.nextElementSibling.classList.remove('hint')
         emailInput.parentNode.classList.remove('valid')
-    }
-
-    //LISTEN WHEN THE USER CORRECTS THE EMAIL INPUT
-    if (validEmail.test(emailInput.value)) {
+    } else if (validEmail.test(emailInput.value)) {
         emailInput.parentNode.classList.remove('not-valid')
         emailInput.nextElementSibling.classList.add('hint')
         emailInput.parentNode.classList.add('valid')
@@ -159,6 +150,7 @@ form.addEventListener('submit', (e) => {
     if (activitiesChecked === 0) {
         activities.classList.add('not-valid')
         activities.classList.remove('valid')
+
     } else {
         activities.classList.remove('not-valid')
         activities.classList.add('valid')
@@ -167,26 +159,29 @@ form.addEventListener('submit', (e) => {
     //TEST THE CREDIT CARD FIELDS
     const validCC = /[0-9]{13,16}/
     if (!validCC.test(ccInput.value)) {
-        ccHint.classList.remove('hint')
-        ccHint.style.color = "red"
+        ccInput.nextElementSibling.classList.remove('hint')
+        ccInput.nextElementSibling.style.color = "red"
     } else if (validCC.test(ccInput.value)) {
-        ccHint.classList.add('hint')
+        ccInput.nextElementSibling.classList.add('hint')
+        ccInput.parentNode.classList.add('valid')
     }
 
     const validZipCode = /^[0-9]{5}$/
     if (!validZipCode.test(zipCode.value)) {
-        zipCodeHint.classList.remove('hint')
-        zipCodeHint.style.color = "red"
+        zipCode.nextElementSibling.classList.remove('hint')
+        zipCode.nextElementSibling.style.color = "red"
     } else if (validZipCode.test(zipCode.value)) {
-        zipCodeHint.classList.add('hint')
+        zipCode.nextElementSibling.classList.add('hint')
+        zipCode.parentNode.classList.add('valid')
     }
 
     const validCVV = /^[0-9]{3}$/
     if (!validCVV.test(cvv.value)) {
-        cvvHint.classList.remove('hint')
-        cvvHint.style.color = "red"
+        cvv.nextElementSibling.classList.remove('hint')
+        cvv.nextElementSibling.style.color = "red"
     } else if (validCVV.test(cvv.value)) {
-        cvvHint.classList.add('hint')
+        cvv.nextElementSibling.classList.add('hint')
+        cvv.parentNode.classList.add('valid')
     }
 })
 
