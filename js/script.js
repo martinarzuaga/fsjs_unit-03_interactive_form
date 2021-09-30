@@ -117,35 +117,38 @@ const cvvHint = document.getElementById('cvv-hint')
 
 form.addEventListener('submit', (e) => {
     e.preventDefault()
-    /*
-    * TEST THE NAME FIELD
-    * */
+
+    //TEST THE NAME FIELD
     const validName = /^\w+$/
     if (!validName.test(nameInput.value)) {
         nameInput.parentNode.classList.add('not-valid')
+        nameInput.nextElementSibling.classList.remove('hint')
+        nameInput.parentNode.classList.remove('valid')
     }
 
     // LISTEN WHEN THE USER CORRECTS THE NAME INPUT
     if (validName.test(nameInput.value)) {
         nameInput.parentNode.classList.remove('not-valid')
+        nameInput.nextElementSibling.classList.add('hint')
+        nameInput.parentNode.classList.add('valid')
     }
 
-    /*
-    * TEST THE EMAIL FIELD
-    * */
+    //TEST THE EMAIL FIELD
     const validEmail = /^(\w+(-)?)+@(\w+(-)?)\.\w+$/
     if (!validEmail.test(emailInput.value)) {
         emailInput.parentNode.classList.add('not-valid')
+        emailInput.nextElementSibling.classList.remove('hint')
+        emailInput.parentNode.classList.remove('valid')
     }
 
-    // LISTEN WHEN THE USER CORRECTS THE EMAIL INPUT
+    //LISTEN WHEN THE USER CORRECTS THE EMAIL INPUT
     if (validEmail.test(emailInput.value)) {
         emailInput.parentNode.classList.remove('not-valid')
+        emailInput.nextElementSibling.classList.add('hint')
+        emailInput.parentNode.classList.add('valid')
     }
 
-    /*
-    * CHECK IF AT LEAST ONE ACTIVITY IS SELECTED
-    * */
+    //CHECK IF AT LEAST ONE ACTIVITY IS SELECTED
     let activitiesChecked = 0
     for (let i = 0; i < activities.elements.length; i++) {
         if (activities.elements[i].checked === true) {
@@ -155,13 +158,13 @@ form.addEventListener('submit', (e) => {
 
     if (activitiesChecked === 0) {
         activities.classList.add('not-valid')
+        activities.classList.remove('valid')
     } else {
         activities.classList.remove('not-valid')
+        activities.classList.add('valid')
     }
 
-    /*
-    * TEST THE CREDIT CARD FIELDS
-    * */
+    //TEST THE CREDIT CARD FIELDS
     const validCC = /[0-9]{13,16}/
     if (!validCC.test(ccInput.value)) {
         ccHint.classList.remove('hint')
@@ -186,3 +189,25 @@ form.addEventListener('submit', (e) => {
         cvvHint.classList.add('hint')
     }
 })
+
+//ACCESSIBILITY ACTIVITIES SECTION
+//Select the array of inputs only in the activities section
+let activitiesInputs = document.querySelectorAll('#activities-box input')
+
+//Loop into the array of inputs and set the class focus to the one is onfocus
+function focusInput(inputsArray) {
+    for (let i = 0; i < inputsArray.length; i++) {
+        inputsArray[i].onfocus = () => {activitiesInputs[i].parentNode.classList.add('focus')}
+    }
+}
+
+focusInput(activitiesInputs)
+
+//Loop into the array of inputs and remove the class focus to the one is onblur
+function blurInput(inputsArray) {
+    for (let i = 0; i < inputsArray.length; i++) {
+        inputsArray[i].onblur = () => {activitiesInputs[i].parentNode.classList.remove('focus')}
+    }
+}
+
+blurInput(activitiesInputs)
