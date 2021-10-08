@@ -27,7 +27,7 @@ colorField.disabled = true
 
 let designField = document.getElementById('design')
 
-designField.addEventListener('change', (e) => {
+designField.addEventListener('keyup', (e) => {
     //Enable the colorField element
     colorField.disabled = false
 
@@ -56,7 +56,9 @@ designField.addEventListener('change', (e) => {
 //REGISTER FOR ACTIVITIES SECTION
 //Select the fieldset when we'll listen to changes on it
 const activities = document.getElementById('activities')
+const activitiesHint = document.getElementById('activities-hint')
 const activitiesCost = document.getElementById('activities-cost')
+const checkboxes = document.querySelectorAll('#activities input')
 let currentCost = 0
 
 function calculateActivityCost (element) {
@@ -71,7 +73,34 @@ function calculateActivityCost (element) {
 }
 
 activities.addEventListener('change', (e) => {
+    const activityDayAndTime = e.target.getAttribute("data-day-and-time");
     calculateActivityCost(e.target)
+
+    function checkToDisable() {
+        for (let i = 0; i < checkboxes.length; i++) {
+            let checkbox = checkboxes[i];
+            if (checkbox.getAttribute("data-day-and-time") === activityDayAndTime && e.target !== checkbox) {
+                checkbox.disabled = true;
+                checkbox.parentElement.classList.add("disabled");
+            }
+        }
+    }
+
+    function checkToEnable(){
+        for (let i = 0; i < checkboxes.length; i++) {
+            let checkbox = checkboxes[i];
+            if (checkbox.getAttribute("data-day-and-time") === activityDayAndTime && e.target !== checkbox) {
+                checkbox.disabled = false;
+                checkbox.parentElement.classList.remove("disabled");
+            }
+        }
+    }
+
+    if (e.target.checked) {
+        checkToDisable()
+    } else {
+        checkToEnable()
+    }
 })
 // PAYMENT INFO SECTION
 // Select the payment options and establish it as selected by default
@@ -105,16 +134,13 @@ paymentOption.addEventListener('change',(e) => {
 })
 
 // VALIDATING FORM SECTION
-const form = document.querySelector('form')
 const nameInput = document.getElementById('name')
 const emailInput = document.getElementById('email')
 const ccInput = document.getElementById('cc-num')
 const zipCode = document.getElementById('zip')
 const cvv = document.getElementById('cvv')
 
-form.addEventListener('submit', (e) => {
-    e.preventDefault()
-
+nameInput.addEventListener('keyup', () => {
     //TEST THE NAME FIELD
     const validName = /^\w+$/
     if (!validName.test(nameInput.value)) {
@@ -126,7 +152,9 @@ form.addEventListener('submit', (e) => {
         nameInput.nextElementSibling.classList.add('hint')
         nameInput.parentNode.classList.add('valid')
     }
+})
 
+emailInput.addEventListener('keyup', () => {
     //TEST THE EMAIL FIELD
     const validEmail = /^(\w+(-)?)+@(\w+(-)?)\.\w+$/
     if (!validEmail.test(emailInput.value)) {
@@ -139,6 +167,9 @@ form.addEventListener('submit', (e) => {
         emailInput.parentNode.classList.add('valid')
     }
 
+})
+
+activities.addEventListener('click', () => {
     //CHECK IF AT LEAST ONE ACTIVITY IS SELECTED
     let activitiesChecked = 0
     for (let i = 0; i < activities.elements.length; i++) {
@@ -149,13 +180,17 @@ form.addEventListener('submit', (e) => {
 
     if (activitiesChecked === 0) {
         activities.classList.add('not-valid')
+        activitiesHint.classList.remove('hint')
         activities.classList.remove('valid')
 
     } else {
         activities.classList.remove('not-valid')
         activities.classList.add('valid')
+        activitiesHint.classList.add('hint')
     }
+})
 
+ccInput.addEventListener('keyup', () => {
     //TEST THE CREDIT CARD FIELDS
     const validCC = /[0-9]{13,16}/
     if (!validCC.test(ccInput.value)) {
@@ -165,7 +200,9 @@ form.addEventListener('submit', (e) => {
         ccInput.nextElementSibling.classList.add('hint')
         ccInput.parentNode.classList.add('valid')
     }
+})
 
+zipCode.addEventListener('keyup', () => {
     const validZipCode = /^[0-9]{5}$/
     if (!validZipCode.test(zipCode.value)) {
         zipCode.nextElementSibling.classList.remove('hint')
@@ -174,7 +211,9 @@ form.addEventListener('submit', (e) => {
         zipCode.nextElementSibling.classList.add('hint')
         zipCode.parentNode.classList.add('valid')
     }
+})
 
+cvv.addEventListener('keyup', () => {
     const validCVV = /^[0-9]{3}$/
     if (!validCVV.test(cvv.value)) {
         cvv.nextElementSibling.classList.remove('hint')
@@ -206,3 +245,7 @@ function blurInput(inputsArray) {
 }
 
 blurInput(activitiesInputs)
+
+/*
+* ================EXCEEDS EXPECTATIONS====================
+* */
