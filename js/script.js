@@ -3,6 +3,7 @@ const nameField = document.getElementById('name')
 
 addEventListener("DOMContentLoaded", () =>{
     nameField.focus()
+    paymentOption.options[1].defaultSelected = true
 })
 
 // JOB ROLE SECTION: Display the "Other job role?" text input only when
@@ -27,7 +28,7 @@ colorField.disabled = true
 
 let designField = document.getElementById('design')
 
-designField.addEventListener('keyup', (e) => {
+designField.addEventListener('change', (e) => {
     //Enable the colorField element
     colorField.disabled = false
 
@@ -102,6 +103,7 @@ activities.addEventListener('change', (e) => {
         checkToEnable()
     }
 })
+
 // PAYMENT INFO SECTION
 // Select the payment options and establish it as selected by default
 const creditCard = document.getElementById('credit-card')
@@ -140,9 +142,15 @@ const ccInput = document.getElementById('cc-num')
 const zipCode = document.getElementById('zip')
 const cvv = document.getElementById('cvv')
 
+/**=========REGEX FOR VALIDATE FORM INPUTS========*/
+const validName = /^\w+$/
+const validEmail = /^(\w+(-)?)+@(\w+(-)?)\.\w+$/
+const validCC = /[0-9]{13,16}/
+const validZipCode = /^[0-9]{5}$/
+const validCVV = /^[0-9]{3}$/
+
 nameInput.addEventListener('keyup', () => {
     //TEST THE NAME FIELD
-    const validName = /^\w+$/
     if (!validName.test(nameInput.value)) {
         nameInput.parentNode.classList.add('not-valid')
         nameInput.nextElementSibling.classList.remove('hint')
@@ -156,7 +164,6 @@ nameInput.addEventListener('keyup', () => {
 
 emailInput.addEventListener('keyup', () => {
     //TEST THE EMAIL FIELD
-    const validEmail = /^(\w+(-)?)+@(\w+(-)?)\.\w+$/
     if (!validEmail.test(emailInput.value)) {
         emailInput.parentNode.classList.add('not-valid')
         emailInput.nextElementSibling.classList.remove('hint')
@@ -192,7 +199,6 @@ activities.addEventListener('click', () => {
 
 ccInput.addEventListener('keyup', () => {
     //TEST THE CREDIT CARD FIELDS
-    const validCC = /[0-9]{13,16}/
     if (!validCC.test(ccInput.value)) {
         ccInput.nextElementSibling.classList.remove('hint')
         ccInput.nextElementSibling.style.color = "red"
@@ -203,7 +209,6 @@ ccInput.addEventListener('keyup', () => {
 })
 
 zipCode.addEventListener('keyup', () => {
-    const validZipCode = /^[0-9]{5}$/
     if (!validZipCode.test(zipCode.value)) {
         zipCode.nextElementSibling.classList.remove('hint')
         zipCode.nextElementSibling.style.color = "red"
@@ -214,7 +219,6 @@ zipCode.addEventListener('keyup', () => {
 })
 
 cvv.addEventListener('keyup', () => {
-    const validCVV = /^[0-9]{3}$/
     if (!validCVV.test(cvv.value)) {
         cvv.nextElementSibling.classList.remove('hint')
         cvv.nextElementSibling.style.color = "red"
@@ -247,5 +251,76 @@ function blurInput(inputsArray) {
 blurInput(activitiesInputs)
 
 /*
-* ================EXCEEDS EXPECTATIONS====================
+* ================FORM SUBMIT VALIDATIONS====================
 * */
+const form = document.querySelector('form')
+
+form.addEventListener('submit', e => {
+    e.preventDefault()
+
+    //TEST THE NAME FIELD
+    if (!validName.test(nameInput.value)) {
+        nameInput.parentNode.classList.add('not-valid')
+        nameInput.nextElementSibling.classList.remove('hint')
+        nameInput.parentNode.classList.remove('valid')
+    } else if (validName.test(nameInput.value)) {
+        nameInput.parentNode.classList.remove('not-valid')
+        nameInput.nextElementSibling.classList.add('hint')
+        nameInput.parentNode.classList.add('valid')
+    }
+
+    //TEST THE EMAIL FIELD
+    if (!validEmail.test(emailInput.value)) {
+        emailInput.parentNode.classList.add('not-valid')
+        emailInput.nextElementSibling.classList.remove('hint')
+        emailInput.parentNode.classList.remove('valid')
+    } else if (validEmail.test(emailInput.value)) {
+        emailInput.parentNode.classList.remove('not-valid')
+        emailInput.nextElementSibling.classList.add('hint')
+        emailInput.parentNode.classList.add('valid')
+    }
+
+    //TEST THE CREDIT CARD FIELDS
+    if (!validCC.test(ccInput.value)) {
+        ccInput.nextElementSibling.classList.remove('hint')
+        ccInput.nextElementSibling.style.color = "red"
+    } else if (validCC.test(ccInput.value)) {
+        ccInput.nextElementSibling.classList.add('hint')
+        ccInput.parentNode.classList.add('valid')
+    }
+
+    if (!validZipCode.test(zipCode.value)) {
+        zipCode.nextElementSibling.classList.remove('hint')
+        zipCode.nextElementSibling.style.color = "red"
+    } else if (validZipCode.test(zipCode.value)) {
+        zipCode.nextElementSibling.classList.add('hint')
+        zipCode.parentNode.classList.add('valid')
+    }
+
+    if (!validCVV.test(cvv.value)) {
+        cvv.nextElementSibling.classList.remove('hint')
+        cvv.nextElementSibling.style.color = "red"
+    } else if (validCVV.test(cvv.value)) {
+        cvv.nextElementSibling.classList.add('hint')
+        cvv.parentNode.classList.add('valid')
+    }
+
+    //CHECK IF AT LEAST ONE ACTIVITY IS SELECTED
+    let activitiesChecked = 0
+    for (let i = 0; i < activities.elements.length; i++) {
+        if (activities.elements[i].checked === true) {
+            activitiesChecked++
+        }
+    }
+
+    if (activitiesChecked === 0) {
+        activities.classList.add('not-valid')
+        activitiesHint.classList.remove('hint')
+        activities.classList.remove('valid')
+
+    } else {
+        activities.classList.remove('not-valid')
+        activities.classList.add('valid')
+        activitiesHint.classList.add('hint')
+    }
+})
