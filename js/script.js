@@ -42,6 +42,13 @@ designField.addEventListener('change', (e) => {
         colorField.options[1].removeAttribute('hidden')
         colorField.options[2].removeAttribute('hidden')
         colorField.options[3].removeAttribute('hidden')
+        // SET THE 0 INDEX OPTION AS A DEFAULT
+        for (let i = 1; i < 4 ; i++) {
+            if (colorField.options[i].selected = true) {
+                colorField.options[i].selected = false
+                colorField.options[0].selected = true
+            }
+        }
     } else if (e.target.selectedIndex === 2) {
         // RESET TO SHOW THE HIDE OPTIONS IF USERS CHANGE TO DESIGN OPTION 2
         colorField.options[4].removeAttribute('hidden')
@@ -51,6 +58,13 @@ designField.addEventListener('change', (e) => {
         colorField.options[1].setAttribute('hidden', 'hidden')
         colorField.options[2].setAttribute('hidden', 'hidden')
         colorField.options[3].setAttribute('hidden', 'hidden')
+        // SET THE 0 INDEX OPTION AS A DEFAULT
+        for (let i = 1; i < 4 ; i++) {
+            if (colorField.options[i].selected = true) {
+                colorField.options[i].selected = false
+                colorField.options[0].selected = true
+            }
+        }
     }
 })
 
