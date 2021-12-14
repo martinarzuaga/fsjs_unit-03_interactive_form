@@ -1,7 +1,7 @@
 // SELECT AND FOCUS THE FORM'S FIRST TEXT INPUT
 const nameField = document.getElementById('name')
 
-addEventListener("DOMContentLoaded", () =>{
+addEventListener("DOMContentLoaded", () => {
     nameField.focus()
     paymentOption.options[1].defaultSelected = true
 })
@@ -43,7 +43,7 @@ designField.addEventListener('change', (e) => {
         colorField.options[2].removeAttribute('hidden')
         colorField.options[3].removeAttribute('hidden')
         // SET THE 0 INDEX OPTION AS A DEFAULT
-        for (let i = 1; i < 4 ; i++) {
+        for (let i = 1; i < 4; i++) {
             if (colorField.options[i].selected = true) {
                 colorField.options[i].selected = false
                 colorField.options[0].selected = true
@@ -59,7 +59,7 @@ designField.addEventListener('change', (e) => {
         colorField.options[2].setAttribute('hidden', 'hidden')
         colorField.options[3].setAttribute('hidden', 'hidden')
         // SET THE 0 INDEX OPTION AS A DEFAULT
-        for (let i = 1; i < 4 ; i++) {
+        for (let i = 1; i < 4; i++) {
             if (colorField.options[i].selected = true) {
                 colorField.options[i].selected = false
                 colorField.options[0].selected = true
@@ -76,7 +76,7 @@ const activitiesCost = document.getElementById('activities-cost')
 const checkboxes = document.querySelectorAll('#activities input')
 let currentCost = 0
 
-function calculateActivityCost (element) {
+function calculateActivityCost(element) {
     activitiesCost.innerText = ''
     if (element.checked) {
         currentCost = currentCost + parseInt(element.dataset.cost)
@@ -101,7 +101,7 @@ activities.addEventListener('change', (e) => {
         }
     }
 
-    function checkToEnable(){
+    function checkToEnable() {
         for (let i = 0; i < checkboxes.length; i++) {
             let checkbox = checkboxes[i];
             if (checkbox.getAttribute("data-day-and-time") === activityDayAndTime && e.target !== checkbox) {
@@ -133,7 +133,7 @@ bitcoin.style.display = 'none'
 // Select the payment option to listen for changes
 const paymentOption = document.getElementById('payment')
 
-paymentOption.addEventListener('change',(e) => {
+paymentOption.addEventListener('change', (e) => {
     if (e.target.value === 'credit-card') {
         creditCard.style.display = 'block'
         paypal.style.display = 'none'
@@ -156,6 +156,30 @@ const ccInput = document.getElementById('cc-num')
 const zipCode = document.getElementById('zip')
 const cvv = document.getElementById('cvv')
 
+const makeValidInput = element => {
+    element.parentNode.classList.remove('not-valid')
+    element.nextElementSibling.classList.add('hint')
+    element.parentNode.classList.add('valid')
+}
+
+const makeInvalidInput = element => {
+    element.parentNode.classList.add('not-valid')
+    element.nextElementSibling.classList.remove('hint')
+    element.parentNode.classList.remove('valid')
+}
+
+const makeValidActivity = element => {
+    element.classList.remove('not-valid')
+    element.classList.add('valid')
+    activitiesHint.classList.add('hint')
+}
+
+const makeInvalidActivity = element => {
+    element.classList.add('not-valid')
+    activitiesHint.classList.remove('hint')
+    element.classList.remove('valid')
+}
+
 /**=========REGEX FOR VALIDATE FORM INPUTS========*/
 const validName = /^\w+$/
 const validEmail = /^(\w+(-)?)+@(\w+(-)?)\.\w+$/
@@ -166,26 +190,18 @@ const validCVV = /^[0-9]{3}$/
 nameInput.addEventListener('keyup', () => {
     //TEST THE NAME FIELD
     if (!validName.test(nameInput.value)) {
-        nameInput.parentNode.classList.add('not-valid')
-        nameInput.nextElementSibling.classList.remove('hint')
-        nameInput.parentNode.classList.remove('valid')
+        makeInvalidInput(nameInput)
     } else if (validName.test(nameInput.value)) {
-        nameInput.parentNode.classList.remove('not-valid')
-        nameInput.nextElementSibling.classList.add('hint')
-        nameInput.parentNode.classList.add('valid')
+        makeValidInput(nameInput)
     }
 })
 
 emailInput.addEventListener('keyup', () => {
     //TEST THE EMAIL FIELD
     if (!validEmail.test(emailInput.value)) {
-        emailInput.parentNode.classList.add('not-valid')
-        emailInput.nextElementSibling.classList.remove('hint')
-        emailInput.parentNode.classList.remove('valid')
+        makeInvalidInput(emailInput)
     } else if (validEmail.test(emailInput.value)) {
-        emailInput.parentNode.classList.remove('not-valid')
-        emailInput.nextElementSibling.classList.add('hint')
-        emailInput.parentNode.classList.add('valid')
+        makeValidInput(emailInput)
     }
 
 })
@@ -203,7 +219,6 @@ activities.addEventListener('click', () => {
         activities.classList.add('not-valid')
         activitiesHint.classList.remove('hint')
         activities.classList.remove('valid')
-
     } else {
         activities.classList.remove('not-valid')
         activities.classList.add('valid')
@@ -214,31 +229,25 @@ activities.addEventListener('click', () => {
 ccInput.addEventListener('keyup', () => {
     //TEST THE CREDIT CARD FIELDS
     if (!validCC.test(ccInput.value)) {
-        ccInput.nextElementSibling.classList.remove('hint')
-        ccInput.nextElementSibling.style.color = "red"
+        makeInvalidInput(ccInput)
     } else if (validCC.test(ccInput.value)) {
-        ccInput.nextElementSibling.classList.add('hint')
-        ccInput.parentNode.classList.add('valid')
+        makeValidInput(ccInput)
     }
 })
 
 zipCode.addEventListener('keyup', () => {
     if (!validZipCode.test(zipCode.value)) {
-        zipCode.nextElementSibling.classList.remove('hint')
-        zipCode.nextElementSibling.style.color = "red"
+        makeInvalidInput(zipCode)
     } else if (validZipCode.test(zipCode.value)) {
-        zipCode.nextElementSibling.classList.add('hint')
-        zipCode.parentNode.classList.add('valid')
+        makeValidInput(zipCode)
     }
 })
 
 cvv.addEventListener('keyup', () => {
     if (!validCVV.test(cvv.value)) {
-        cvv.nextElementSibling.classList.remove('hint')
-        cvv.nextElementSibling.style.color = "red"
+        makeInvalidInput(cvv)
     } else if (validCVV.test(cvv.value)) {
-        cvv.nextElementSibling.classList.add('hint')
-        cvv.parentNode.classList.add('valid')
+        makeValidInput(cvv)
     }
 })
 
@@ -249,7 +258,9 @@ let activitiesInputs = document.querySelectorAll('#activities-box input')
 //Loop into the array of inputs and set the class focus to the one is onfocus
 function focusInput(inputsArray) {
     for (let i = 0; i < inputsArray.length; i++) {
-        inputsArray[i].onfocus = () => {activitiesInputs[i].parentNode.classList.add('focus')}
+        inputsArray[i].onfocus = () => {
+            activitiesInputs[i].parentNode.classList.add('focus')
+        }
     }
 }
 
@@ -258,65 +269,69 @@ focusInput(activitiesInputs)
 //Loop into the array of inputs and remove the class focus to the one is onblur
 function blurInput(inputsArray) {
     for (let i = 0; i < inputsArray.length; i++) {
-        inputsArray[i].onblur = () => {activitiesInputs[i].parentNode.classList.remove('focus')}
+        inputsArray[i].onblur = () => {
+            activitiesInputs[i].parentNode.classList.remove('focus')
+        }
     }
 }
 
 blurInput(activitiesInputs)
 
 /*
-* ================FORM SUBMIT VALIDATIONS====================
-* */
+ * ================FORM SUBMIT VALIDATIONS====================
+ * */
 const form = document.querySelector('form')
 
 form.addEventListener('submit', e => {
     e.preventDefault()
+    let nameValid = false
+    let emailValid = false
+    let ccValid = false
+    let zipValid = false
+    let cvvValid = false
+    let activitiesValid = false
 
     //TEST THE NAME FIELD
     if (!validName.test(nameInput.value)) {
-        nameInput.parentNode.classList.add('not-valid')
-        nameInput.nextElementSibling.classList.remove('hint')
-        nameInput.parentNode.classList.remove('valid')
+        makeInvalidInput(nameInput)
+        nameValid = false
     } else if (validName.test(nameInput.value)) {
-        nameInput.parentNode.classList.remove('not-valid')
-        nameInput.nextElementSibling.classList.add('hint')
-        nameInput.parentNode.classList.add('valid')
+        makeValidInput(nameInput)
+        nameValid = true
     }
 
     //TEST THE EMAIL FIELD
     if (!validEmail.test(emailInput.value)) {
-        emailInput.parentNode.classList.add('not-valid')
-        emailInput.nextElementSibling.classList.remove('hint')
-        emailInput.parentNode.classList.remove('valid')
+        makeInvalidInput(emailInput)
+        emailValid = false
     } else if (validEmail.test(emailInput.value)) {
-        emailInput.parentNode.classList.remove('not-valid')
-        emailInput.nextElementSibling.classList.add('hint')
-        emailInput.parentNode.classList.add('valid')
+        makeValidInput(emailInput)
+        emailValid = true
     }
 
     //TEST THE CREDIT CARD FIELDS
     if (!validCC.test(ccInput.value)) {
-        ccInput.nextElementSibling.classList.remove('hint')
-        ccInput.nextElementSibling.style.color = "red"
+        makeInvalidInput(ccInput)
+        ccValid = false
     } else if (validCC.test(ccInput.value)) {
-        ccInput.nextElementSibling.classList.add('hint')
-        ccInput.parentNode.classList.add('valid')
+        makeValidInput(ccInput)
+        ccValid = true
     }
 
     if (!validZipCode.test(zipCode.value)) {
-        zipCode.nextElementSibling.classList.remove('hint')
-        zipCode.nextElementSibling.style.color = "red"
+        makeInvalidInput(zipCode)
+        zipValid = false
     } else if (validZipCode.test(zipCode.value)) {
-        zipCode.nextElementSibling.classList.add('hint')
-        zipCode.parentNode.classList.add('valid')
+        makeValidInput(zipCode)
+        zipValid = true
     }
 
     if (!validCVV.test(cvv.value)) {
-        cvv.nextElementSibling.classList.remove('hint')
-        cvv.nextElementSibling.style.color = "red"
+        makeInvalidInput(cvv)
+        cvvValid = false
     } else if (validCVV.test(cvv.value)) {
-        cvv.nextElementSibling.classList.add('hint')
-        cvv.parentNode.classList.add('valid')
+        makeValidInput(cvv)
+        cvvValid = true
     }
 
     //CHECK IF AT LEAST ONE ACTIVITY IS SELECTED
@@ -328,13 +343,14 @@ form.addEventListener('submit', e => {
     }
 
     if (activitiesChecked === 0) {
-        activities.classList.add('not-valid')
-        activitiesHint.classList.remove('hint')
-        activities.classList.remove('valid')
-
+        makeInvalidActivity(activities)
+        activitiesValid = false
     } else {
-        activities.classList.remove('not-valid')
-        activities.classList.add('valid')
-        activitiesHint.classList.add('hint')
+        makeValidActivity(activities)
+        activitiesValid = true
+    }
+
+    if (nameValid && emailValid && ccValid && zipValid && cvvValid && activitiesValid) {
+        form.submit()
     }
 })
