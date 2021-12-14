@@ -181,9 +181,9 @@ const makeInvalidActivity = element => {
 }
 
 /**=========REGEX FOR VALIDATE FORM INPUTS========*/
-const validName = /^\w+$/
+const validName = /^[A-Za-z]+$/
 const validEmail = /^(\w+(-)?)+@(\w+(-)?)\.\w+$/
-const validCC = /[0-9]{13,16}/
+const validCC = /^[0-9]{13,16}$/
 const validZipCode = /^[0-9]{5}$/
 const validCVV = /^[0-9]{3}$/
 
